@@ -1,2 +1,2 @@
 # English-To-IPA-Collections-MIT
-Convert from English to IPA tools and datas with MIT/BSD
+Programs and data for converting English text to IPA with MIT/BSD licenses
