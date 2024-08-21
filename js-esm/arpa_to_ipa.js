@@ -5,9 +5,9 @@ const vowels = {
     'AE0': 'æ',
     'AE1': 'æ',
     'AE2': 'æ',
-    'AH0': 'ʌ',
+    'AH0': 'ə',
     'AH1': 'ʌ',
-    'AH2': 'ʌ',
+    'AH2': 'ə',//AH is converted to ʌ when bearing primary stress and to ə otherwise (AH1 -> ʌ; AH0, AH2 -> ə) from https://github.com/menelik3/cmudict-ipa
     'AO0': 'ɔ',
     'AO1': 'ɔ',
     'AO2': 'ɔ',
