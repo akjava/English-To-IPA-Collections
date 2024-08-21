@@ -1,7 +1,8 @@
 const vowels = {
-    'AA0': 'ɑ',
-    'AA1': 'ɑ',
-    'AA2': 'ɑ',
+    //apply rule owel length is indicated (AA -> ɑː, ER -> ɝː, IY -> iː, UW -> uː). However, unstressed word-final ER and IY are short (i.e., ER0 -> ɝ and IY -> i when word-final).
+    'AA0': 'ɑː',
+    'AA1': 'ɑː',
+    'AA2': 'ɑː',
     'AE0': 'æ',
     'AE1': 'æ',
     'AE2': 'æ',
@@ -20,18 +21,18 @@ const vowels = {
     'EH0': 'ɛ',
     'EH1': 'ɛ',
     'EH2': 'ɛ',
-    'ER0': 'ɝ',
-    'ER1': 'ɝ',
-    'ER2': 'ɝ',
+    'ER0': 'ɝː',
+    'ER1': 'ɝː',
+    'ER2': 'ɝː',
     'EY0': 'eɪ',
     'EY1': 'eɪ',
     'EY2': 'eɪ',
     'IH0': 'ɪ',
     'IH1': 'ɪ',
     'IH2': 'ɪ',
-    'IY0': 'i',
-    'IY1': 'i',
-    'IY2': 'i',
+    'IY0': 'iː',
+    'IY1': 'iː',
+    'IY2': 'iː',
     'OW0': 'oʊ',
     'OW1': 'oʊ',
     'OW2': 'oʊ',
@@ -41,9 +42,9 @@ const vowels = {
     'UH0': 'ʊ',
     'UH1': 'ʊ',
     'UH2': 'ʊ',
-    'UW0': 'u',
-    'UW1': 'u',
-    'UW2': 'u'
+    'UW0': 'uː',
+    'UW1': 'uː',
+    'UW2': 'uː'
   };
 
   const consonants = {
