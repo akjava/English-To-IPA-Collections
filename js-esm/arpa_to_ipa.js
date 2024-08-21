@@ -105,7 +105,7 @@ const vowels = {
   function arpa_to_ipa_with_syllables(arpa) {
     arpa = arpa.toUpperCase();
     const phonemes = arpa.split(' ');
-    const syllables = [];
+    let syllables = [];
     let currentSyllable = { nucleus: null, ontop: "", coder:"", accent: -1 }; // Default accent is -1
   
     for (let i = 0; i < phonemes.length; i++) {
@@ -151,10 +151,21 @@ const vowels = {
   
     //console.log(syllables)
     let last_syallable = syllables[syllables.length-1]
+
+    // move single last ontop to pre-coder
+    if (last_syallable.nucleus == null){
+        const pre_syallable = syllables[syllables.length-2]
+        pre_syallable.coder += last_syallable.ontop
+        syllables = syllables.slice(0,syllables.length-1)
+    }
+    
+    last_syallable = syllables[syllables.length-1]
+
+
     //console.log(last_syallable)
     if (last_syallable.nucleus!=null){
-      if (last_syallable.accent<2){
-        if(last_syallable.nucleus.endsWith("ː")){
+      if (last_syallable.accent<1){
+        if(last_syallable.nucleus.endsWith("iː") || last_syallable.nucleus.endsWith("ɝː")){
           last_syallable.nucleus = last_syallable.nucleus.substring(0, last_syallable.nucleus.length-1)
         }
       }
