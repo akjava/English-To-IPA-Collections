@@ -74,14 +74,17 @@ const vowels = {
     'ZH': 'ʒ'
   };
 
+
+  
   const arpa_to_ipa_lookup_tables = {
     ...vowels,
     ...consonants
   };
 
   class Syllable {
-    constructor(ontop,nucleus, coder,accent) {
-        this.ontop = ontop;   
+    constructor(ontop,nucleus, coder,accent,ontop_arpa) {
+        this.ontop = ontop;
+        this.ontop_arpa = ontop_arpa   
         this.nucleus  = nucleus; // vowel
         
         this.coder = coder
@@ -92,6 +95,35 @@ const vowels = {
     display() {
         console.log(`Ontop: ${this.ontop} Nucleus: ${this.nucleus}, Coder: ${this.coder}, Accent: ${this.accent}`);
     }
+  }
+
+  function splitCodaOnset(consonants) {
+  
+    const sonorityHierarchy = {
+      "P": 1, "B": 1, "T": 1, "D": 1, "K": 1, "G": 1, "CH": 1, "JH": 1,
+      "F": 2, "V": 2, "TH": 2, "DH": 2, "S": 2, "Z": 2, "SH": 2, "ZH": 2, "HH": 2,
+      "M": 3, "N": 3, "NG": 3,
+      "L": 4, "R": 4,
+      "W": 5, "Y": 5,  // sound base
+    };
+  
+    let coda = [];
+    let onset = [];
+  
+    let peakIndex = 0;  
+    for (let i = 0; i < consonants.length; i++) {
+        const consonant = consonants[i];
+        if (consonant in sonorityHierarchy && sonorityHierarchy[consonant] > sonorityHierarchy[consonants[peakIndex]]) {
+          peakIndex = i;
+        }
+      
+  
+      // split at peak
+      coda = consonants.slice(0, peakIndex);
+      onset = consonants.slice(peakIndex);
+    }
+  
+    return { coda, onset };
   }
   
   // Function to convert Arpabet to IPA
@@ -106,7 +138,7 @@ const vowels = {
     arpa = arpa.toUpperCase();
     const phonemes = arpa.split(' ');
     let syllables = [];
-    let currentSyllable = { nucleus: null, ontop: "", coder:"", accent: -1 }; // Default accent is -1
+    let currentSyllable = { nucleus: null, ontop: "", coder:"", accent: -1 ,ontop_arpa:[]}; // Default accent is -1
   
     for (let i = 0; i < phonemes.length; i++) {
       const phoneme = phonemes[i];
@@ -133,13 +165,15 @@ const vowels = {
   
         // Found a vowel, create a new syllable
         //if (currentSyllable.vowel !== null || currentSyllable.consonant !== "") {
-          syllables.push(new Syllable(currentSyllable.ontop,ipaSymbol, currentSyllable.coder, accent));
+          syllables.push(new Syllable(currentSyllable.ontop,ipaSymbol, currentSyllable.coder, accent,currentSyllable.ontop_arpa));
         //}
   
-        currentSyllable = { nucleus: null, ontop: "", coder:"",accent: -1 };
+        currentSyllable = { nucleus: null, ontop: "", coder:"",accent: -1 ,ontop_arpa:[]};
       } else {
+        console.log(currentSyllable)
         // Consonant, add to current syllable
         currentSyllable.ontop += ipaSymbol;
+        currentSyllable.ontop_arpa.push(phoneme)
       }
     }
   
@@ -149,18 +183,25 @@ const vowels = {
       syllables.push(new Syllable(currentSyllable.ontop,currentSyllable.nucleus, currentSyllable.coder, currentSyllable.accent));
     }
   
-    //console.log(syllables)
+    // merge last syallable  
     let last_syallable = syllables[syllables.length-1]
-
     // move single last ontop to pre-coder
     if (last_syallable.nucleus == null){
         const pre_syallable = syllables[syllables.length-2]
         pre_syallable.coder += last_syallable.ontop
         syllables = syllables.slice(0,syllables.length-1)
     }
-    
-    last_syallable = syllables[syllables.length-1]
 
+    const syallable_count = syllables.length
+    for(let i=1;i<syllables.length;i++){
+        const result = splitCodaOnset(syllables[i].ontop_arpa)
+        console.log(result)
+    }
+    
+    
+
+
+    last_syallable = syllables[syllables.length-1]
     if (last_syallable.nucleus!=null){
         if (last_syallable.accent<1){
           if(last_syallable.nucleus.endsWith("iː") && last_syallable.coder==""){
