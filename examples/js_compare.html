@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ARPA to IPA Compare</title>
+</head>
+<body>
+    <div id="result"></div>
+   <!-- import ONNXRuntime Web from CDN (ESM) -->
+
+    <script type="module">
+    import { arpa_to_ipa } from "../js-esm/arpa_to_ipa.js";
+    import { loadCmudict } from "../js-esm/cmudict_loader.js";
+
+    function startsWithNonAlphabet(str) {
+        // A-Z以外で始まるかどうかをチェック
+        return /^[^a-zA-Z]/.test(str);
+    }
+
+    function get_arpa(word){
+        return cmudict[word.toUpperCase()]
+    }
+
+     async function loadDataAndProcess() {
+        console.log("call loadDataAndProcess")
+    try {
+    await ipadictReady
+    await cmudictReady
+
+    for (const key of Object.keys(cmudict)) {
+        if (key.startsWith(";;;")){
+            continue
+        }
+        if (startsWithNonAlphabet(key)){
+            continue
+        }
+        //console.log(key)
+        const arpa = get_arpa(key)
+        if (typeof arpa == "undefined"){
+            console.log("not found "+key)
+            continue
+        }
+
+    
+   
+    const convert_ipa = arpa_to_ipa(arpa,true)
+    let correct_ipa_raw = cmudict_ipa[key]
+    
+    if (typeof correct_ipa_raw =="undefined"){
+        // usually multipl ephonome,ignores
+        continue
+    }
+
+    //correct_ipa_raw = correct_ipa_raw.replace(/["ˈ"ˌ"]/g, "") //remove accent
+    const correct_ipa = correct_ipa_raw.split(",")[0]
+   
+    total += 1
+    if (convert_ipa!=correct_ipa){
+        if (is_same_ignore_schwa(correct_ipa,convert_ipa)){
+            sub_correct +=1
+        }else{
+            miss.push({"word":key,arpa:arpa,"correct":correct_ipa,"converted":convert_ipa})
+        }
+       
+        //break
+        //console.log(`${key} from ${arpa} to ${convert_ipa} correct = ${correct_ipa}`)
+    }else{
+        correct+=1
+    }
+    //console.log(`${key}: ${value},${cmudict_ipa[key]}`);
+    }
+
+    console.log(`${total} correct = ${correct} sub =${sub_correct}`)
+        }catch (error) {
+            console.error('Error:', error);
+        }
+
+        let max_miss = 400
+    let c = 0
+    for(let m in miss){
+        console.log(miss[m])
+        c++
+        if (c>max_miss){
+            break
+        }
+    }
+    }
+
+    function is_same_ignore_schwa(correct_word,test_word){
+        correct_word = correct_word.replace(/["ː"]/g, "")
+        test_word = test_word.replace(/["ː"]/g, "")
+       
+        if (correct_word.length!=test_word.length){
+            return false
+        }
+
+        for (let i in correct_word){
+            const ch = correct_word[i]
+            const tw = test_word[i]
+           
+            if (ch!=tw){
+                if (ch !="ə"){
+                    return false
+                }
+            }
+        }
+       return true
+    }
+
+    async function do_test(word){
+        await ipadictReady
+        await cmudictReady
+
+        const arpa = get_arpa(word)
+        if (typeof arpa == "undefined"){
+            console.log("not found "+word)
+            return null
+        }
+        const convert_ipa = arpa_to_ipa(arpa)
+        const correct_ipa_raw = cmudict_ipa[word]
+        if (typeof correct_ipa_raw =="undefined"){
+            // usually multipl ephonome,ignores
+            return null
+        }
+        const correct_ipa = correct_ipa_raw.split(",")[0]
+        const result = {"correct":false,"word":word,arpa:arpa,"correct":correct_ipa,"converted":convert_ipa}
+        if (convert_ipa==correct_ipa){
+            result["correct"]=true
+        }
+        return result
+    }
+
+    let total = 0
+    let correct = 0
+    let sub_correct = 0
+    let miss = []
+    let cmudict_ipa ={}
+    let cmudict ={}
+    let cmudictReady = loadCmudict(cmudict,'../dictionaries/cmudict-0.7b')
+    let ipadictReady = loadCmudict(cmudict_ipa,'../dictionaries/unknown_license_cmudict-0.7b-ipa.txt',"\t")
+
+    loadDataAndProcess(); 
+
+    
+    const result = await do_test("ABDICATED") //AARON
+    console.log(result)
+
+    
+    
+    </script>
+</body>
+</html>
