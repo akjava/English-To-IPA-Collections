@@ -99,32 +99,57 @@ const vowels = {
   const consonantClusters = [
     "PL", "PR", "TR", "BR", "KR", "GR", "DR", "GL", "FL", "BL", "KL",
     // Stop + Nasal
-    "TN", "DN", "PN", "KN", "GN", "BM", "DM", "PM", "GM", "TM",
+    "TN", "DN", "PN",  "GN", "BM", "DM", "PM", "GM", "TM",
     // Fricative + Approximant/Lateral
     "SL", "SW", "SHL", "SHR", "VL", "VR", "ZL", "ZR", "THL", "THR",
     "FTH", "VTH", "ZTH", 
     // Other important combinations
     "FY", "KY", "MY", "NY", "HY", "BY", "PY", "LY",
+    //add
+    "KW","DW",
     // 3-phoneme Clusters
-    "SPR", "STR", "SKR", "SPL", "STL", "SKL", "SHT", "SPT", "STK", "SPN",
+    "SPR", "STR", "SKR", "SPL", "STL", "SKL", "SHT", "SPT", "STK", "SPN"
+    
   ];
 
-  function splitCodaOnset(consonants) {
+  function splitCodaOnset(consonants,pre_nucleus=null,post_nucleus=null) {
     if (consonants.length==0){
         return [[],[]];
     }else if (consonants.length==1){
         return [[],consonants];
     }
-
+    let peakIndex = 1
     const cluster=consonants.join("")
-    if (consonantClusters.includes(cluster)){
+    if ((cluster == "DM" || cluster == "DN") && (pre_nucleus == "ə" || pre_nucleus=="æ")){ //AD
+    peakIndex = 1
+    }else if (consonantClusters.includes(cluster)){
         return [[],consonants];
     }
 
-    let peakIndex = 1
+    
+    //console.log(cluster,pre_nucleus)
+    if (cluster == "RDV"){
+        peakIndex = 2
+    }
+    else{
+        if (consonants.length>3){
+            const last_cluster=consonants.slice(1).join("")
+            //console.log(head_cluster)
+            if (consonantClusters.includes(last_cluster)){
+                peakIndex = 1
+            }else{
+                peakIndex = 2
+            }
+        }
+    }
+
+
+    
+   
+    //console.log(peakIndex)
+    
     const coda = consonants.slice(0, peakIndex);
     const onset = consonants.slice(peakIndex);
-    
   
     return [ coda, onset ];
   }
@@ -210,7 +235,7 @@ const vowels = {
     }
 
     for(let i=1;i<syllables.length;i++){
-        const result = splitCodaOnset(syllables[i].ontop_arpa)
+        const result = splitCodaOnset(syllables[i].ontop_arpa, syllables[i-1].nucleus, syllables[i].nucleus)
         const coder = arpas_symbol_to_ipa(result[0])
         const onset = arpas_symbol_to_ipa(result[1])
         syllables[i-1].coder = coder
