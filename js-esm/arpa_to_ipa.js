@@ -96,15 +96,32 @@ const vowels = {
         console.log(`Ontop: ${this.ontop} Nucleus: ${this.nucleus}, Coder: ${this.coder}, Accent: ${this.accent}`);
     }
   }
+  const consonantClusters = [
+    "PL", "PR", "TR", "BR", "KR", "GR", "DR", "GL", "FL", "BL", "KL",
+    // Stop + Nasal
+    "TN", "DN", "PN", "KN", "GN", "BM", "DM", "PM", "GM", "TM",
+    // Fricative + Approximant/Lateral
+    "SL", "SW", "SHL", "SHR", "VL", "VR", "ZL", "ZR", "THL", "THR",
+    "FTH", "VTH", "ZTH", 
+    // Other important combinations
+    "FY", "KY", "MY", "NY", "HY", "BY", "PY", "LY",
+    // 3-phoneme Clusters
+    "SPR", "STR", "SKR", "SPL", "STL", "SKL", "SHT", "SPT", "STK", "SPN",
+  ];
 
   function splitCodaOnset(consonants) {
     if (consonants.length==0){
         return [[],[]];
+    }else if (consonants.length==1){
+        return [[],consonants];
     }
-    let peakIndex = 0
-    if  (consonants.length>1){
-        peakIndex = 1
+
+    const cluster=consonants.join("")
+    if (consonantClusters.includes(cluster)){
+        return [[],consonants];
     }
+
+    let peakIndex = 1
     const coda = consonants.slice(0, peakIndex);
     const onset = consonants.slice(peakIndex);
     
