@@ -161,9 +161,6 @@ const vowels = {
     
     last_syallable = syllables[syllables.length-1]
 
-
-    
-
   
     return syllables;
   }
