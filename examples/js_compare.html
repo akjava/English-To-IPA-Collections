@@ -75,7 +75,7 @@
             console.error('Error:', error);
         }
 
-        let max_miss = 400
+        let max_miss = 10
     let c = 0
     for(let m in miss){
         console.log(miss[m])
@@ -139,7 +139,7 @@
     let cmudictReady = loadCmudict(cmudict,'../dictionaries/cmudict-0.7b')
     let ipadictReady = loadCmudict(cmudict_ipa,'../dictionaries/unknown_license_cmudict-0.7b-ipa.txt',"\t")
 
-    //loadDataAndProcess(); 
+    loadDataAndProcess(); 
 
     
     const result = await do_test("AANCOR") //AARON

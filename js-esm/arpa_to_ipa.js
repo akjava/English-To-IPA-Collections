@@ -98,32 +98,18 @@ const vowels = {
   }
 
   function splitCodaOnset(consonants) {
-  
-    const sonorityHierarchy = {
-      "P": 1, "B": 1, "T": 1, "D": 1, "K": 1, "G": 1, "CH": 1, "JH": 1,
-      "F": 2, "V": 2, "TH": 2, "DH": 2, "S": 2, "Z": 2, "SH": 2, "ZH": 2, "HH": 2,
-      "M": 3, "N": 3, "NG": 3,
-      "L": 4, "R": 4,
-      "W": 5, "Y": 5,  // sound base
-    };
-  
-    let coda = [];
-    let onset = [];
-  
-    let peakIndex = 0;  
-    for (let i = 0; i < consonants.length; i++) {
-        const consonant = consonants[i];
-        if (consonant in sonorityHierarchy && sonorityHierarchy[consonant] > sonorityHierarchy[consonants[peakIndex]]) {
-          peakIndex = i;
-        }
-      
-  
-      // split at peak
-      coda = consonants.slice(0, peakIndex);
-      onset = consonants.slice(peakIndex);
+    if (consonants.length==0){
+        return [[],[]];
     }
+    let peakIndex = 0
+    if  (consonants.length>1){
+        peakIndex = 1
+    }
+    const coda = consonants.slice(0, peakIndex);
+    const onset = consonants.slice(peakIndex);
+    
   
-    return { coda, onset };
+    return [ coda, onset ];
   }
   
   // Function to convert Arpabet to IPA
@@ -133,6 +119,20 @@ const vowels = {
     return syallablesToString(syllable,addStressMarkers)
   }
   
+  function arpas_symbol_to_ipa(phonemes){
+    let ipaText = ""
+    for (let i = 0; i < phonemes.length; i++) {
+        const phoneme = phonemes[i];
+        let ipaSymbol = arpa_to_ipa_lookup_tables[phoneme];
+        if (ipaSymbol === undefined) {
+            console.log(`Invalid Arpabet phoneme: ${phoneme}`);
+            continue; // Skip invalid phonemes
+          }
+        ipaText+=ipaSymbol
+    }
+    return ipaText
+  }
+
   // Function to convert Arpabet to IPA and extract syllable information
   function arpa_to_ipa_with_syllables(arpa) {
     arpa = arpa.toUpperCase();
@@ -170,7 +170,7 @@ const vowels = {
   
         currentSyllable = { nucleus: null, ontop: "", coder:"",accent: -1 ,ontop_arpa:[]};
       } else {
-        console.log(currentSyllable)
+        //console.log(currentSyllable)
         // Consonant, add to current syllable
         currentSyllable.ontop += ipaSymbol;
         currentSyllable.ontop_arpa.push(phoneme)
@@ -192,10 +192,12 @@ const vowels = {
         syllables = syllables.slice(0,syllables.length-1)
     }
 
-    const syallable_count = syllables.length
     for(let i=1;i<syllables.length;i++){
         const result = splitCodaOnset(syllables[i].ontop_arpa)
-        console.log(result)
+        const coder = arpas_symbol_to_ipa(result[0])
+        const onset = arpas_symbol_to_ipa(result[1])
+        syllables[i-1].coder = coder
+        syllables[i].ontop = onset
     }
     
     
