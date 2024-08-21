@@ -162,17 +162,8 @@ const vowels = {
     last_syallable = syllables[syllables.length-1]
 
 
-    //console.log(last_syallable)
-    if (last_syallable.nucleus!=null){
-      if (last_syallable.accent<1){
-        if(last_syallable.nucleus.endsWith("iː") && last_syallable.coder==""){
-            last_syallable.nucleus = last_syallable.nucleus.substring(0, last_syallable.nucleus.length-1)
-        }
-        else if(last_syallable.nucleus.endsWith("ɝː")){
-          last_syallable.nucleus = last_syallable.nucleus.substring(0, last_syallable.nucleus.length-1)
-        }
-      }
-    }
+    
+
   
     return syllables;
   }
