@@ -1,3 +1,5 @@
+//ver 0.1
+
 const vowels = {
     //apply rule owel length is indicated (AA -> ɑː, ER -> ɝː, IY -> iː, UW -> uː). However, unstressed word-final ER and IY are short (i.e., ER0 -> ɝ and IY -> i when word-final).
     'AA0': 'ɑː',
@@ -21,7 +23,7 @@ const vowels = {
     'EH0': 'ɛ',
     'EH1': 'ɛ',
     'EH2': 'ɛ',
-    'ER0': 'ɝ',
+    'ER0': 'ɝ',//somehow this way betters
     'ER1': 'ɝː',
     'ER2': 'ɝː',
     'EY0': 'eɪ',
@@ -75,6 +77,11 @@ const vowels = {
   };
 
 
+  const AccentMode ={
+    SIMPLIFIED_VOWEL_ALIGNED:"SIMPLIFIED_VOWEL_ALIGNED",//Stable not for Human
+    STANDARD:"STANDARd",//for Human but broken ,it's hard to split syallable constraints correctly
+    NONE:"NONE"
+  };
   
   const arpa_to_ipa_lookup_tables = {
     ...vowels,
@@ -91,11 +98,13 @@ const vowels = {
         this.accent = accent; 
     }
   
-    // 音節の詳細を表示するメソッド
+  
     display() {
         console.log(`Ontop: ${this.ontop} Nucleus: ${this.nucleus}, Coder: ${this.coder}, Accent: ${this.accent}`);
     }
   }
+
+  //for AccentMode.STANDARD but not good
   const consonantClusters = [
     "PL", "PR", "TR", "BR", "KR", "GR", "DR", "GL", "FL", "BL", "KL",
     // Stop + Nasal
@@ -109,9 +118,9 @@ const vowels = {
     "KW","DW",
     // 3-phoneme Clusters
     "SPR", "STR", "SKR", "SPL", "STL", "SKL", "SHT", "SPT", "STK", "SPN"
-    
   ];
 
+  // for AccentMode.STANDARD but not good
   function splitCodaOnset(consonants,pre_nucleus=null,post_nucleus=null) {
     if (consonants.length==0){
         return [[],[]];
@@ -127,7 +136,6 @@ const vowels = {
     }
 
     
-    //console.log(cluster,pre_nucleus)
     if (cluster == "RDV"){
         peakIndex = 2
     }
@@ -143,11 +151,6 @@ const vowels = {
         }
     }
 
-
-    
-   
-    //console.log(peakIndex)
-    
     const coda = consonants.slice(0, peakIndex);
     const onset = consonants.slice(peakIndex);
   
@@ -155,10 +158,10 @@ const vowels = {
   }
   
   // Function to convert Arpabet to IPA
-  function arpa_to_ipa(arpa,addStressMarkers=true) {
+  function arpa_to_ipa(arpa,accent_mode=AccentMode.SIMPLIFIED_VOWEL_ALIGNED) {
     let syllable = arpa_to_ipa_with_syllables(arpa)
-    //console.log(syllable)
-    return syallablesToString(syllable,addStressMarkers)
+    
+    return syallablesToString(syllable,accent_mode)
   }
   
   function arpas_symbol_to_ipa(phonemes){
@@ -197,23 +200,17 @@ const vowels = {
       // Check for vowel (Corrected condition)
       if (phoneme in vowels) {
         
-        //console.log(`${phoneme} is vowel`)
-        // Handle cases where there might be no accent marker
         let accent = -1; // Default accent is -1
         const lastChar = phoneme.slice(-1);
         if (!isNaN(lastChar)) { // Check if the last character is a number
           accent = parseInt(lastChar, 10);
         }
   
-        // Found a vowel, create a new syllable
-        //if (currentSyllable.vowel !== null || currentSyllable.consonant !== "") {
           syllables.push(new Syllable(currentSyllable.ontop,ipaSymbol, currentSyllable.coder, accent,currentSyllable.ontop_arpa));
         //}
   
         currentSyllable = { nucleus: null, ontop: "", coder:"",accent: -1 ,ontop_arpa:[]};
       } else {
-        //console.log(currentSyllable)
-        // Consonant, add to current syllable
         currentSyllable.ontop += ipaSymbol;
         currentSyllable.ontop_arpa.push(phoneme)
       }
@@ -260,9 +257,9 @@ const vowels = {
     return syllables;
   }
   
-  function syallablesToString(syllables,addStressMarkers=True) {
+  function syallablesToString(syllables,accent_mode=AccentMode.SIMPLIFIED_VOWEL_ALIGNED) {
     let ipaString = "";
-    let primaryStressAdded = false;
+    
   
     for (let i = 0; i < syllables.length; i++) {
       const syllable = syllables[i];
@@ -279,7 +276,7 @@ const vowels = {
       } else if (syllable.accent === 0) {
         //ipaString = "ˌ" + ipaString;
       }
-      if (addStressMarkers){
+      if (accent_mode == AccentMode.STANDARD){
         ipaString += accent
       }
       ipaString += syllable.ontop + nucleus+syllable.coder;
