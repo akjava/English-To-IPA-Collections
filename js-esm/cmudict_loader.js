@@ -1,6 +1,4 @@
 //ver 0.1
-let cmudict = {}
-
 async function loadCmudict(obj=cmudict,path='./cmudict-0.7b',splitter="  ") { //split double-space
   return new Promise(async (resolve, reject) => {
     try {
@@ -23,19 +21,18 @@ async function loadCmudict(obj=cmudict,path='./cmudict-0.7b',splitter="  ") { //
 
 //let cmudictReady =loadCmudict();
 
-function get_arpa(word){
+function get_arpa(cmudict,word){
   return cmudict[word.toUpperCase()]
 }
   
 
-async function text2arpa(text){
-  await cmudictReady
-  const inputText = text
+ function textToArpa(cmudict,text){
+  const inputText = text.toUpperCase()
   let result = []
   let non_converted = []
   var words = inputText.split(" ")
   words.forEach(word => {
-      const arpa = get_arpa(word)
+      const arpa = get_arpa(cmudict,word)
       if (typeof arpa == "undefined"){
       result.push("@"+word)
       non_converted.push(word)
@@ -47,4 +44,4 @@ async function text2arpa(text){
   return {"result":result,"non_converted":non_converted}
 }
 
-export { text2arpa, loadCmudict};
+export { textToArpa, loadCmudict};
