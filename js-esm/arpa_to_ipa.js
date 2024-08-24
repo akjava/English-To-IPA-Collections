@@ -277,9 +277,13 @@ const vowels = {
         //ipaString = "ˌ" + ipaString;
       }
       if (accent_mode == AccentMode.STANDARD){
-        ipaString += accent
+        ipaString += accent+syllable.ontop + nucleus+syllable.coder;
+      }else if (accent_mode == AccentMode.SIMPLIFIED_VOWEL_ALIGNED){
+        ipaString += syllable.ontop + accent+nucleus+syllable.coder;
+      }else{
+        ipaString += syllable.ontop + nucleus+syllable.coder;
       }
-      ipaString += syllable.ontop + nucleus+syllable.coder;
+      
     }
   
     return ipaString;
