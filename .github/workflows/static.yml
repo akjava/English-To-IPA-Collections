@@ -38,7 +38,7 @@ jobs:
         with:
           # Upload entire repository
           path: '.'
-      - name: Upload2 artifact2 examples
+      
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
