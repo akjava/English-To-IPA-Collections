@@ -2,34 +2,32 @@ import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers
 
 
 async function text2text_generation(words,convert_ipa=false) {
-    // Hugging Faceのpipeline関数を使用してモデルをロードします。
-    const generator = await pipeline('text2text-generation', 'mini-bart-g2p',{quantized: false});
+  const generator = await pipeline('text2text-generation', 'mini-bart-g2p',{quantized: false});
+  const inputTexts = words;
+  const options = { max_new_tokens: 100 };
+  const outputs = await generator(inputTexts, options);
 
-    // 入力テキストとパラメータを指定します。
-    const inputTexts = words;
-    const options = { max_new_tokens: 100 };
-
-    // モデルからテキストを生成します。
-    const outputs = await generator(inputTexts, options);
-    
-
-    if (convert_ipa){
-        const ipas = []
-    outputs.forEach(output => {
-        const ipa = arpa_to_ipa(output.generated_text).replace(/\s/g, "")
-        ipas.push(ipa)
-        });
-   return ipas
-    }else{
-        return outputs
-    }
-    
+  if (convert_ipa){
+      const ipas = []
+  outputs.forEach(output => {
+      const ipa = arpa_to_ipa(output.generated_text).replace(/\s/g, "")
+      ipas.push(ipa)
+      });
+      return ipas
+  }else{
+      return outputs  //arpa
+  }
+  
 }
 
-async function textToArpa(cmudict,text){
-    const inputText = text
-    
-    const dict = wordsToArpa(cmudict,inputText)
+
+async function textToArpa(cmudict,text,replace_questions=false){
+    if (replace_questions){
+        text = text.replaceAll("!",".").replaceAll("?",".")
+    }
+    const cleanedString = text.replace(/[^a-zA-Z0-9.,!? ]/g, '');
+        
+    const dict = wordsToArpa(cmudict,cleanedString)
     
 
 

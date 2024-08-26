@@ -158,10 +158,33 @@ const vowels = {
   }
   
   // Function to convert Arpabet to IPA
-  function arpa_to_ipa(arpa,accent_mode=AccentMode.SIMPLIFIED_VOWEL_ALIGNED) {
-    let syllable = arpa_to_ipa_with_syllables(arpa)
+  function arpa_to_ipa(arpa_text,accent_mode=AccentMode.SIMPLIFIED_VOWEL_ALIGNED) {
+    arpa_text = arpa_text.replaceAll(",","\t,").replaceAll(".","\t.").replaceAll("?","\t?").replaceAll("!","\t!")
+    console.log(arpa_text)
+    const words = arpa_text.split("\t")
+    const ipa_texts = []
+    words.forEach(function(word){
+        word = word.trim()
+        //console.log(`'${word}'`)
+        if (word == ""){
+            return
+        }
+        else if (word == "." || word ==","|| word =="!"|| word =="?"){
+            ipa_texts.push(word)
+        }else{
+          
+            let syllable = arpa_to_ipa_with_syllables(word)
+            const ipa_text = syallablesToString(syllable,accent_mode)
+
+            ipa_texts.push(ipa_text)
+            ipa_texts.push(" ") //word separator
+        }
+       
+    });
+
+    return ipa_texts.join("").replaceAll(" .",".").replaceAll(" ,",",").replaceAll(" ?","?").replaceAll(" !","!")
+
     
-    return syallablesToString(syllable,accent_mode)
   }
   
   function arpas_symbol_to_ipa(phonemes){
