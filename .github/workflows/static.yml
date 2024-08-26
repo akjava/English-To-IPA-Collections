@@ -37,11 +37,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: |
-          '.'
-          './examples'
-          './models'
-          './js-esm'
+          path: './models'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
