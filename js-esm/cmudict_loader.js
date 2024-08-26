@@ -27,7 +27,7 @@ function get_arpa(cmudict,word){
   
 
  function textToArpa(cmudict,text){
-  var keep_words = [",","."]
+  var keep_words = [",",".","!","?"]
   let inputText = text.toUpperCase()
   keep_words.forEach(function(key){
     inputText = inputText.replaceAll(key," "+key+" ");
@@ -39,12 +39,14 @@ function get_arpa(cmudict,word){
   var words = inputText.split(" ")
   
   words.forEach(word => {
-      if (keep_words.includes(word)){//,. just keep
+     
+      if (keep_words.includes(word)){//,.!? just keep
         result.push(word)
       }else if (word ==""){
         
         }else{
         const arpa = get_arpa(cmudict,word)
+        
         if (typeof arpa == "undefined"){
           result.push("@"+word)
           non_converted.push(word)
