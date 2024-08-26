@@ -39,7 +39,6 @@ jobs:
           # Upload entire repository
           path: '.'
       
-        uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: './examples'
