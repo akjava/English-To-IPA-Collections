@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: '.,./dictionaries,./models,./js-esm'
+          source: '.,./dictionaries,./models,./js-esm'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
