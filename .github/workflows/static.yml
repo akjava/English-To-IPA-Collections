@@ -38,17 +38,17 @@ jobs:
         with:
           # Upload entire repository
           path: '.'
-        name: Upload artifact examples
+      - name: Upload artifact examples
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: './examples'
-        name: Upload artifact models
+      - name: Upload artifact models
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: './models'
-        name: Upload artifact js
+      - name: Upload artifact js
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
