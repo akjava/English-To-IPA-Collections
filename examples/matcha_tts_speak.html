@@ -23,9 +23,12 @@
         
         let matcha_tts_raw
         let cmudict ={}
-
+        let speaking = false
         async function main() {
-            
+            if (speaking){
+                console.log("speaking return")
+            }
+            speaking = true
             console.log("main called")
             if(!matcha_tts_raw){
                 matcha_tts_raw = new MatchaTTSRaw()
@@ -54,6 +57,7 @@
             console.timeEnd("infer");
 
             webWavPlay(result)
+            speaking = false
         }
         function update_range(){
             const value = document.getElementById('spks').value
