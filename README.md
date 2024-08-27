@@ -2,7 +2,9 @@
 Programs and data for converting English text to IPA with MIT/Apache2.0/BSD licenses
 
 ## Working Demo
-<a href="https://huggingface.co/spaces/Akjava/Match-TTS-ONNX">Match-TTS Onnx with Arpabet to IPA</a>
+Huggingface:<a href="https://huggingface.co/spaces/Akjava/Match-TTS-ONNX">Match-TTS Onnx with Arpabet to IPA</a><br>
+<br>
+Github page:<a href="https://akjava.github.io/English-To-IPA-Collections/">JS Example</a>
 
 ## License
 **Anyway follow the CMUDict license.**
