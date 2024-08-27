@@ -23,7 +23,7 @@
             if(!matcha_onnx){
                 matcha_onnx = new MatchaTTSRaw()
                 console.time("load model");
-                await matcha_onnx.load_model('./models/matcha-tts/lj_speech_sim.onnx?b',{ executionProviders: ['wasm'] ,interOpNumThreads:1,intraOpNumThreads:1});
+                await matcha_onnx.load_model('./models/matcha-tts/ljspeech_sim.onnx',{ executionProviders: ['wasm'] ,interOpNumThreads:1,intraOpNumThreads:1});
                 
                 console.timeEnd("load model");
             }else{
