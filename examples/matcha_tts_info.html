@@ -14,6 +14,7 @@
     
     <script type="module">
         //trying full local access,If you seee file not found error get ,set file url and get from https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/
+        //must be absolute path
         ort.env.wasm.wasmPaths = "/English-To-IPA-Collections/js-esm/"
         import { MatchaTTSRaw } from "./js-esm/matcha_tts_raw.js";
         let matcha_onnx
@@ -22,7 +23,7 @@
             if(!matcha_onnx){
                 matcha_onnx = new MatchaTTSRaw()
                 console.time("load model");
-                await matcha_onnx.load_model('./models/matcha-tts/lj_speech_sim.onnx?',{ executionProviders: ['wasm'] ,interOpNumThreads:1,intraOpNumThreads:1});
+                await matcha_onnx.load_model('./models/matcha-tts/lj_speech_sim.onnx?a',{ executionProviders: ['wasm'] ,interOpNumThreads:1,intraOpNumThreads:1});
                 
                 console.timeEnd("load model");
             }else{
