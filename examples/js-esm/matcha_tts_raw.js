@@ -19,6 +19,7 @@ idToSymbol[i] = Symbols[i];
 
 class MatchaTTSRaw {
     constructor() {
+        this.processing = false
     }
     async load_model(model_path,options={}){
         this.session = await ort.InferenceSession.create(model_path,options);
@@ -112,6 +113,13 @@ class MatchaTTSRaw {
 }
 
 async infer(text, temperature, speed,spks=0) {
+    if(this.processing){
+        console.error("already processing")
+        return null
+    }
+    this.processing = true
+    try{
+
 
     const dic = this.processText(text);
 console.log(`x:${dic.x.join(", ")}`);
@@ -155,7 +163,12 @@ const output = await this.session.run(send_data);
 const wav_array = output.wav.data;
 const x_lengths_array = output.wav_lengths.data;
 
+this.processing = false
 return wav_array;
+    }catch (exception){
+        this.processing = false
+        return null
+    }
 }
 
 

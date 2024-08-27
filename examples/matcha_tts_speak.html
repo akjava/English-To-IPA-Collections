@@ -55,8 +55,11 @@
             console.time("infer");
             const result = await matcha_tts_raw.infer(ipa_text, tempature, speed,spks);
             console.timeEnd("infer");
-
-            webWavPlay(result)
+            if (result!=null){
+                webWavPlay(result)
+               
+            }
+    
             speaking = false
         }
         function update_range(){
