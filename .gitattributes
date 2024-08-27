@@ -1,2 +1,1 @@
-examples/models/matcha-tts/*.onnx filter=lfs diff=lfs merge=lfs -text
 *.onnx filter=lfs diff=lfs merge=lfs -text
