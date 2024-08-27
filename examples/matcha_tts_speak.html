@@ -5,9 +5,9 @@
     <title>ONNX Runtime JavaScript Quick Start</title>
 </head>
 <body>
-    <div id="result"></div>
+    <h1>Match-TTS Onnx with ipa converter</h1>
     <div>this example using Quantized version(lowquality and slow) because of Github Page 100MB limitation</div>
-    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.webgpu.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js" ></script>
     
 
     <script type="module">
@@ -76,7 +76,6 @@
         }
 
         window.onload = async function(){
-            console.log(ort)
             document.getElementById('textInput').onchange = main;
             document.getElementById('myButton').onclick = main;
             document.getElementById('spks').onchange = update_range
