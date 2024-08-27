@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ONNX Runtime JavaScript Quick Start</title>
+</head>
+<body>
+    <div id="result"></div>
+   
+   
+    <script src="./js-esm/ort.min.js"></script>
+    
+    <script type="module">
+        import { MatchaOnnx } from "./js-esm/matcha_tts_en.js";
+
+        let matcha_onnx
+        async function main() {
+            console.log("main called")
+            if(!matcha_onnx){
+                matcha_onnx = new MatchaOnnx()
+                console.time("load model");
+                await matcha_onnx.load_model('./models/matcha-tts/lj_speech_sim.onnx',{ executionProviders: ['webgpu','wasm'] });
+                
+                console.timeEnd("load model");
+            }else{
+                console.log("session exist skip load model")
+            }
+            document.getElementById('result').innerHTML = matcha_onnx.get_input_names_html()　+""+ matcha_onnx.get_output_names_html();
+        }
+
+
+        window.onload = async function(){
+            console.log(ort)
+            main()
+        }
+        
+    
+    </script>
+   
+</body>
+</html>
