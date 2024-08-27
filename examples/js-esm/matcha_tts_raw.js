@@ -33,7 +33,7 @@ class MatchaTTSRaw {
         if (typeof this.session=='undefined'){
             return null
         }
-        let outputNamesString = '[outputs]<br>';
+        let outputNamesString = '[outputNames]<br>';
         const outputNames = this.session.outputNames;
         for (let outputName of outputNames) {
             console.log(outputName)
@@ -47,7 +47,7 @@ class MatchaTTSRaw {
             return null
         }
         
-        let inputNamesString = '[Inputs]<br>';
+        let inputNamesString = '[inputNames]<br>';
         const inputNames = this.session.inputNames;
 
         for (let inputName of inputNames) {
