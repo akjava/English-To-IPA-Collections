@@ -1,6 +1,10 @@
-# English-To-IPA-Collections-MIT
-Programs and data for converting English text to IPA with MIT/Apache2.0/BSD licenses
+# English-To-IPA-Collections
+Programs and data for converting English text to IPA with MIT/Apache2.0/BSD licenses.Recently focus on Web.
 
+In this Repo,I'll list dictionaries and examples
+
+## Collections
+- cumdict-ipa_simplified_vowel-aligned
 ## Working Demo
 Huggingface:<a href="https://huggingface.co/spaces/Akjava/Match-TTS-ONNX">Match-TTS Onnx with Arpabet to IPA</a><br>
 <br>
